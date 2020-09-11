@@ -1,2 +1,2 @@
 *.DS_Store
-*.dbsqlite3
+*.db.sqlite3
