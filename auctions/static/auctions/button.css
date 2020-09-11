@@ -1,0 +1,10 @@
+.link-button { 
+     background: none;
+     border: none;
+     color: black;
+     margin:0;
+     cursor: pointer; 
+    text-align: left;
+    margin: 0;
+    padding:0;
+}

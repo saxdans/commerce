@@ -1,0 +1,16 @@
+.my-sidebar {
+    -ms-flex: 0 0 230px;
+    flex: 0 0 230px;
+    background-color: greenyellow; 
+} 
+
+
+
+.table-holder {
+  overflow-x:auto;
+}
+
+.fade {
+    -webkit-transition-duration: 1s; /* Safari */
+    transition-duration: 1s;
+}

@@ -1,0 +1,199 @@
+{% extends "auctions/layout.html" %}
+
+{% block title %}
+    Listing view
+{% endblock %}
+
+{% block body %}
+    
+    
+    <h2 style="display:inline-block">Listing view</h2>
+   
+   <div style="display:inline-block">
+    <form class="m-3" method="post">
+        {% csrf_token %}
+        {% if on_wl == False %}
+        <input style="border:none" type="submit" value="Add to watchlist" name="watchlist">
+        {% else %}
+        <input style="border:none" type="submit" value="Remove from watchlist" name="watchlist">
+        {% endif %}
+        <input type="hidden" value="{{ listing.id }}" name="listing_id">
+        </form>
+       </div>
+        <div style="display:inline">{{ wlmessage }}</div>
+    
+{% if listing %}
+    <table class="table w-fixed">
+        <tr>
+            <td scope="col">
+                <h2 style="display:inline">{{ listing.listing_title }}</h2>
+                {% if listing.is_active == False %}
+                <h2 style="display:inline">[CLOSED]</h2>
+                {% endif %}
+                <div style="color:grey;font-size: 12px">Added: {{ listing.date_created }}</div>
+                <div style="color:grey;font-size: 12px">Lister: {{ listing.listing_owner }}</div>
+                
+            </td>
+        </tr>
+        
+        
+        {% if winner == True  %}
+        <tr>
+        <td>
+            <div style="text-align:center">
+            <strong>--- You are the winner --- </strong>
+                </div>
+            </td>
+        </tr>
+        {% endif %}
+        
+        
+        {% if nowinner == True  %}
+        <tr>
+        <td>
+            <div style="text-align:center">
+            <strong>--- Closed before any bids were made --- </strong>
+                </div>
+            </td>
+        </tr>
+        {% endif %}
+        
+        <tr>
+            <td scope="col">
+                <img  width="400" src="{{ listing.listing_image_url }}">
+            </td>
+        </tr>
+        
+         <tr >
+            <td scope="col">
+                 <div>
+                       <strong>Listing info:</strong> <br>
+                </div>
+               <div>
+                   {{ listing.listing_description }}
+                </div>
+            </td>
+        </tr>
+        
+       
+    
+
+    <tr>
+        <td>
+    <div>
+    {% if is_active %}
+    {% if not listing.listing_owner|stringformat:'s' == username|stringformat:'s' %}
+     <form method="post">
+
+    {% csrf_token %}
+     
+   
+    <div class="w-50" style="max-width: 300px;display:inline-block">
+        {{ bidform.as_p }}
+        
+    </div>
+         
+    <div style="display:inline-block" class="m-3">
+        <input type="submit" class="button" value="OK" name="bidOK" id="okbutton">
+        <input type="hidden" name="listing_id" value="{{ listing.id }}">
+     </div>
+         
+         
+         
+         <div style="display:inline-block" class="m-3">
+             <strong>{{ invalid_bid_message }}</strong>
+         </div>
+         
+    </form>
+    {% else %}
+        <form method="post">
+           {%csrf_token%}
+         <div style="display:inline-block;min-width:500px" class="w-75 mb-3">
+        <strong>Click here to close auction for this listing: </strong>
+            
+        <div class="ml-3" style="display:inline">
+        <input type="submit" class="button" value="Close bidding" name="closebidding">
+        <input type="hidden" name="listing_id" value="{{ listing.id }}">
+        </div>  
+     </div>
+        </form>
+    {% endif %}
+    
+    
+        
+        </div>
+       
+        {% if is_first_bid == False %}
+       <div class="mt-3">
+            <strong>Current bid: </strong>{{ current_bid}}$  
+           <div style="color:grey;font-size: 12px;display:inline">
+               &nbsp;by {{ bidder }}
+           </div>
+        </div>
+        {% else %}
+        <div>
+            <strong>Starting bid: {{ current_bid }}$ </strong> 
+            <div style="color:grey;font-size: 12px;display:inline">
+               &nbsp;by {{ bidder }}
+           </div>
+        </div>
+        {% endif %}
+        {% else %}
+            <div>
+            <strong>Bid closed at: {{ current_bid }}$ </strong> 
+            <div style="color:grey;font-size: 12px;display:inline">
+               &nbsp;by {{ bidder }}
+           </div>
+        </div>
+            
+        <br>
+        </td>
+        </tr>
+        {% endif %}
+        <tr>
+            <td>
+        <strong>Comment section</strong>
+                </td>
+            </tr>
+        {% if comments %}
+        {% for c in comments %}
+        
+        <tr>
+        <td>
+            
+            <div class="mb-3">{{ c.comment_field }}</div>
+            
+            <div style="color:grey;font-size: 12px">Added: {{ c.time_posted }}</div>
+                <div style="color:grey;font-size: 12px">
+                    by 
+                    {% if c.comment_user|stringformat:'s' == username|stringformat:'s' %}
+                    you
+                    {% else %}
+                    {{ c.comment_user }}
+                    {% endif %}
+            </div>
+        </td>
+        </tr>
+        {% endfor %}
+        {% endif %}
+        <tr>
+        <td>
+            <form method="post">
+            {% csrf_token %}
+            <div class="w-60 h-25" style="min-width: 500px">
+           {{ commentform.as_p}}
+                </div>
+            <input type="submit" class="button" value="Comment" name="comment">
+            <input type="hidden" name="listing_id" value="{{ listing.id }}">
+            </form>
+        </td>
+        </tr>
+   </table>
+
+{% endif %}
+
+    {% if message %}
+        {{ message }}
+    {% endif %}
+    
+{% endblock %}

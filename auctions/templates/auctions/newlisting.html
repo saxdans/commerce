@@ -1,0 +1,41 @@
+{% extends 'auctions/layout.html' %}
+
+{% block title %}
+    New listing
+{% endblock %}
+
+    {% block body %}
+    <h2>Add new listing</h2>
+    <div class="form-group">
+        
+    <form method="post">
+
+    {% csrf_token %}
+     
+    {{ form.as_p }}
+    <table class="table table-fixed">
+        <tr>
+        <td style="min-width:400px;padding:0">
+                <div class="mt-3">
+            <strong>Starting bid($) </strong>
+                    </div>
+            <div class="mt-3">
+       {{ bidform.as_p }}
+            </div>
+            <div class="mt-2" style="float:left">
+        <strong>{{ invalid_bid_message }}</strong>
+        </div>
+            </td>
+        </tr>
+        <tr>
+            <td>
+    <div class="w-75 m-3" justify-content="flex-end"  align="right"><input class="btn btn-default btn-outline-secondary" type="submit" value="Add listing" name="PostEntry">
+            </div>
+                </td>
+            </tr>
+        </table>
+    </form>
+    
+   
+    </div>
+{% endblock %}

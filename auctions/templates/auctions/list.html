@@ -1,0 +1,104 @@
+{% extends "auctions/layout.html" %}
+
+
+{% block title %}
+    {{ block_title }}
+{% endblock %}
+
+
+{% block body %}
+ 
+
+   
+    <h2>
+        {{ headline }}
+    </h2>
+    
+
+{% if not listings %}
+    <br>
+<br>
+<br>
+   
+<h3>No listings here</h3>
+
+{% endif %}
+
+{% for l in listings %}
+
+
+<table class="table table-fixed">
+    
+    <tr class="d-flex">
+        <td class="col-4" scope="col" style="padding:5vw;min-width:300px">
+            <form method="post" action="{% url 'viewlisting' l.listing_title %}">
+            {% csrf_token %}
+                {% if l.listing_image_url %}
+            <input type="image" style="width:300px" src="{{ l.listing_image_url }}" value="{{ l.listing_title }}" class="link-button" name="fromindex">
+                {% else %}
+                <input class="" type="image" style="width:300px" src="https://afmec.org/images/no-image-available-icon.jpg" value="{{ l.listing_title }}" class="link-button">
+                {% endif %}
+            <input type="hidden" name="listing_id" value="{{ l.id }}">
+            <input type="hidden" name="fromlistpage" value="{{ l.id }}">
+        </form>
+        </td>
+        
+        <td class="col-4 responsive" scope="col" style="padding:5vw;min-width:300px">
+           <div class="ml-3"> 
+               <h3>
+                    {{ l.listing_title }}
+                    {% if l.is_active == False %}
+                    [CLOSED]
+                    {% endif %}
+               </h3>
+            
+            
+            
+            <br>
+        
+            <div style="display:inline"><strong>Price:</strong></div> {{ l.current_bid }}$
+            <br>
+            <br> 
+            <br> 
+            <br> 
+            
+            
+            <div style="display:inline;color:grey;font-size: 12px">Added: {{ l.date_created }}
+               <br>
+                by 
+                {% if l.listing_owner|stringformat:'s' == username|stringformat:'s' %}
+                you
+                {% else %}
+                {{l.listing_owner}}
+               </div>
+               {% endif %}
+            </div>
+        </td>
+        <td class="w-100 responsive" scope="col-6" style="padding:5vw">
+           
+            {% if l.listing_description|length >= 268 %}
+            {{ l.listing_description | slice:":268"}}...
+            {% endif %}
+            {% if l.listing_description|length < 268 %}
+            {{ l.listing_description}}
+            {% endif %}
+        </td>
+    </tr>
+</table>
+
+    
+        
+       
+        
+       
+        
+   
+        
+
+    
+    
+
+{% endfor %}
+   
+    
+{% endblock %}

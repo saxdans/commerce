@@ -1,0 +1,35 @@
+{% extends 'auctions/layout.html' %}
+
+{% block title %}
+    Categories
+{% endblock %}
+
+{% block body %}
+  <h2>Categories</h2>
+   
+   
+{% for c in categories %}
+<table class="table w-fixed">
+
+    <tr>
+        <td scope="col">
+            
+                <form method="post" action="{% url 'categorylist' c.0  %}">
+                    {% csrf_token%}
+                    
+                    <input type="submit" style="border:none;background-color:transparent" value="{{ c.0 }}">
+                </form>
+                
+        </td>
+    </tr>
+
+</table>
+
+
+{% endfor %}
+
+
+
+
+
+{%  endblock %}
